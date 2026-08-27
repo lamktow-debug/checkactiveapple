@@ -1,0 +1,50 @@
+# --- moi truong, khong bao gio day len ---
+venv/
+venv-*/
+__pycache__/
+*.pyc
+.chrome_profiles/
+
+# --- BI MAT: key 2captcha va token GitHub nam trong file nay ---
+app_settings.json
+proxies.txt
+
+# --- du lieu chay, rieng cua tung may ---
+serials.txt
+ketqua_*.csv
+screenshots/
+block_dumps/
+outputs/
+
+# --- san pham dong goi ---
+build/
+dist/
+*.dmg
+
+# --- rac cua macOS va Office ---
+.DS_Store
+~$*
+*.tmp
+
+# --- ban sao luu, khong can lich su ---
+backup-*/
+*.bak
+*.orig-*
+
+# --- Khong thuoc app Check Active ---
+# Bao cao NPI, ban render, thu vien anh: van nam nguyen tren dia, chi la
+# khong day len repo cua app. Muon dua len thi xoa cac dong duoi day.
+_to_delete/
+.superpowers/
+.vscode/
+hsnl_oneway_work/
+npi_report_render*/
+Bao_cao_NPI_*
+ONEWAY_*NPI*
+NPI_ONEWAY_export.pdf
+build_npi_report*.py
+localize_vietnamese_report_terms.py
+barcode_scan
+barcode_scan.swift
+barcode_results.txt
+thu_vien_can_tai.txt

@@ -1,0 +1,13 @@
+# Danh sách proxy — copy file này thành proxies.txt rồi điền IP thật.
+# Không có proxies.txt thì script chạy bằng IP thật và tự ép về 1 luồng.
+#
+# Hỗ trợ 2 định dạng:
+#   http://user:pass@host:port
+#   host:port:user:pass
+#   host:port                (proxy không cần đăng nhập)
+#
+# Gợi ý: residential xoay IP là loại ăn thua với Apple/Akamai.
+# Datacenter proxy thường bị chặn sẵn cả dải, mua phí tiền.
+#
+# http://user123:pass456@gate.provider.com:8000
+# 123.45.67.89:8000:user123:pass456

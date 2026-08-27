@@ -1,0 +1,56 @@
+#!/bin/bash
+# Mo app Check Active bang dung Python trong venv cua project.
+#
+# KHONG hardcode duong dan: tu suy ra thu muc project tu vi tri cua chinh file
+# nay (.app/Contents/MacOS/launcher -> len 3 cap). Chep ca thu muc di dau cung
+# chay duoc.
+#
+# Neu app chet, KHONG de no chet im lang: ghi loi ra loi_gan_nhat.txt roi bao.
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(cd "$HERE/../../.." && pwd)"
+VENV_PYTHON="$PROJECT_DIR/venv/bin/python"
+LOG="$PROJECT_DIR/loi_gan_nhat.txt"
+
+cd "$PROJECT_DIR" || {
+    osascript -e 'display alert "Check Active" message "Khong vao duoc thu muc project."'
+    exit 1
+}
+
+if [ ! -f "$PROJECT_DIR/app_qt.py" ]; then
+    osascript -e 'display alert "Check Active" message "Khong thay app_qt.py canh app. Dung tach '"'"'Check Active.app'"'"' ra khoi thu muc project."'
+    exit 1
+fi
+
+if [ ! -x "$VENV_PYTHON" ]; then
+    osascript -e 'display alert "Check Active" message "Chua cai dat. Bam dup CAI_DAT.command trong cung thu muc."'
+    open "$PROJECT_DIR"
+    exit 1
+fi
+
+# Chay app, giu lai moi thu no in ra stderr
+chay() {
+    : > "$LOG"
+    "$VENV_PYTHON" "$1" 2> >(tee -a "$LOG" >&2)
+    return $?
+}
+
+if "$VENV_PYTHON" -c "import PySide6" >/dev/null 2>&1; then
+    chay app_qt.py
+    CODE=$?
+else
+    osascript -e 'display notification "Chua cai PySide6 — dang mo giao dien cu. Chay CAI_DAT.command de cai day du." with title "Check Active"'
+    chay app_gui.py
+    CODE=$?
+fi
+
+# Thoat binh thuong (0) hoac do nguoi dung dong cua so thi khong bao gi
+if [ $CODE -ne 0 ] && [ -s "$LOG" ]; then
+    DONG_CUOI="$(tail -3 "$LOG" | tr '\n' ' ' | cut -c1-180)"
+    osascript -e "display alert \"Check Active bi loi\" message \"$(printf '%s' "$DONG_CUOI" | sed 's/"/\\"/g')
+
+Chi tiet day du da luu vao loi_gan_nhat.txt trong thu muc app.\" buttons {\"Mo thu muc\", \"Dong\"} default button \"Mo thu muc\"" >/dev/null 2>&1 \
+        && open -R "$LOG"
+fi
+
+exit $CODE
